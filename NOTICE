@@ -1,0 +1,9 @@
+auditaz-cli
+Copyright 2026 MEET MEDIA PRODUTOS DIGITAIS LTDA.
+
+Auditaz is a Meet Media product. This is the open-source data-collection
+component of the AWS cost analysis service. It performs only read-only AWS
+API calls (Describe/List/Get) and never writes, modifies, or deletes any
+resource in your account.
+
+Licensed under the Apache License, Version 2.0 (see LICENSE).

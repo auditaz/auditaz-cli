@@ -1,0 +1,50 @@
+{
+  "ce:GetCostAndUsage": "Read",
+  "ce:GetReservationUtilization": "Read",
+  "ce:GetReservationCoverage": "Read",
+  "ce:GetSavingsPlansUtilization": "Read",
+  "ce:GetSavingsPlansCoverage": "Read",
+
+  "ec2:DescribeRegions": "List",
+  "ec2:DescribeInstances": "List",
+  "ec2:DescribeVolumes": "List",
+  "ec2:DescribeAddresses": "List",
+  "ec2:DescribeSnapshots": "List",
+  "ec2:DescribeNatGateways": "List",
+  "ec2:DescribeRouteTables": "List",
+
+  "rds:DescribeDBInstances": "List",
+  "rds:DescribeDBSnapshots": "List",
+  "rds:DescribeReservedDBInstances": "List",
+
+  "s3:ListAllMyBuckets": "List",
+  "s3:ListBucket": "List",
+  "s3:GetBucketLocation": "Read",
+  "s3:GetLifecycleConfiguration": "Read",
+  "s3:ListBucketMultipartUploads": "List",
+  "s3:ListMultipartUploadParts": "List",
+
+  "cloudwatch:GetMetricData": "Read",
+  "cloudwatch:GetMetricStatistics": "Read",
+
+  "lambda:ListFunctions": "List",
+
+  "cloudfront:ListDistributions": "List",
+
+  "elasticloadbalancing:DescribeLoadBalancers": "Read",
+  "elasticloadbalancing:DescribeTargetGroups": "Read",
+  "elasticloadbalancing:DescribeTargetHealth": "Read",
+
+  "logs:DescribeLogGroups": "List",
+
+  "dynamodb:ListTables": "List",
+  "dynamodb:DescribeTable": "Read",
+
+  "redshift:DescribeClusters": "List",
+
+  "route53:ListHostedZones": "List",
+
+  "sts:GetCallerIdentity": "Read",
+
+  "iam:SimulatePrincipalPolicy": "Read"
+}

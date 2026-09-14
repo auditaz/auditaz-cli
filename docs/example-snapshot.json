@@ -1,0 +1,45 @@
+{
+  "schema_version": 2,
+  "collector_version": "dev",
+  "collected_at": "2026-09-08T12:00:00Z",
+  "account_id": "123456789012",
+  "regions": ["us-east-1", "eu-west-1"],
+  "elastic_ips": [
+    {"allocation_id": "eipalloc-1", "public_ip": "52.1.2.3", "associated": false, "region": "us-east-1"}
+  ],
+  "ebs_volumes": [
+    {"volume_id": "vol-aaa", "state": "available", "size_gib": 100, "type": "gp2", "region": "us-east-1"},
+    {"volume_id": "vol-bbb", "state": "in-use", "size_gib": 50, "type": "gp3", "attached_instance_id": "i-1", "region": "us-east-1"}
+  ],
+  "ebs_snapshots": [],
+  "s3_buckets": [
+    {"name": "old-assets", "region": "us-east-1", "has_lifecycle": false, "size_bytes": 0}
+  ],
+  "ec2_instances": [
+    {"instance_id": "i-1", "instance_type": "m5.large", "state": "running", "region": "us-east-1", "avg_cpu_percent": 3.2},
+    {"instance_id": "i-2", "instance_type": "t3.medium", "state": "stopped", "region": "eu-west-1"}
+  ],
+  "rds_instances": [],
+  "rds_snapshots": [],
+  "nat_gateways": [
+    {"nat_gateway_id": "nat-1", "region": "us-east-1", "monthly_data_gb": 12.5}
+  ],
+  "route_tables": [],
+  "load_balancers": [
+    {"arn": "arn:aws:elb:...:lb/app/1", "name": "web", "kind": "application", "region": "us-east-1", "healthy_targets": 0}
+  ],
+  "log_groups": [
+    {"name": "/aws/lambda/fn", "region": "us-east-1", "stored_bytes": 4200000, "retention_days": 0}
+  ],
+  "dynamodb_tables": [
+    {"name": "sessions", "region": "us-east-1", "billing_mode": "PROVISIONED", "provisioned_rcu": 100, "provisioned_wcu": 100}
+  ],
+  "redshift_clusters": [],
+  "hosted_zones": [
+    {"id": "Z1", "name": "example.com.", "record_count": 2},
+    {"id": "Z2", "name": "app.example.com.", "record_count": 14}
+  ],
+  "cost_lines": [
+    {"service": "Amazon EC2", "usage_type": "BoxUsage:m5.large", "amount_usd": 61.32}
+  ]
+}

@@ -1,0 +1,7 @@
+# Compiled binary at the repo root. The leading slash matters: without it the
+# pattern would also match the cmd/auditaz/ directory and hide the CLI's source.
+/auditaz
+
+# Scan snapshots: a real inventory of an AWS account (account id, Elastic IPs,
+# volumes, snapshots). These must never be committed, least of all to a public repo.
+auditaz-scan-*.json
