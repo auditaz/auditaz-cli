@@ -1,0 +1,48 @@
+name: release
+
+# Tag-driven. Pushing `vX.Y.Z` is the whole publish ritual: goreleaser compiles
+# every platform from that exact commit and attaches the archives, and the
+# attestation step signs a provenance statement tying each artifact back to this
+# workflow run. Nothing is built on anyone's laptop.
+on:
+  push:
+    tags:
+      - "v*"
+
+permissions:
+  contents: write
+  # The two below are what make the binaries verifiable: id-token to request
+  # the OIDC token Sigstore signs with, attestations to record the result.
+  id-token: write
+  attestations: write
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          # goreleaser builds the changelog from history; a shallow clone has
+          # none and the release notes come out empty.
+          fetch-depth: 0
+
+      - uses: actions/setup-go@v5
+        with:
+          go-version-file: go.mod
+          cache: true
+
+      - name: goreleaser
+        uses: goreleaser/goreleaser-action@v6
+        with:
+          # Pinned to the major: v3 will rename configuration keys this file
+          # uses, and a release workflow that breaks on someone else's schedule
+          # is worse than one that lags a major.
+          version: "~> v2"
+          args: release --clean
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: attest build provenance
+        uses: actions/attest-build-provenance@v2
+        with:
+          subject-path: dist/*.tar.gz, dist/*.zip, dist/checksums.txt

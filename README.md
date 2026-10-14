@@ -17,10 +17,11 @@ access to my AWS account?" This tool exists so you don't have to. There is no IA
 role to deploy and no third-party access. You run it, you read the file it
 produces, and you decide whether to send it.
 
-> **Don't trust the binary — build it yourself.** The whole point is auditability.
-> Read the code, run the read-only test, then compile it yourself — see
-> [Install](#install) and [Audit before you run](#audit-before-you-run). Nothing
-> here requires a pre-built binary from us.
+> **Don't take our word for it — verify.** The whole point is auditability. Every
+> release binary is built by GitHub Actions from a tagged commit and carries a
+> provenance attestation you can check with one command, and the source it was
+> built from is right here. Compiling it yourself stays a first-class path — see
+> [Install](#install) and [Audit before you run](#audit-before-you-run).
 
 ## What it does — and does not — do
 
@@ -58,9 +59,42 @@ sts:GetCallerIdentity
 
 ## Install
 
-Requires Go (see [`go.mod`](go.mod) for the version). Both options below compile
-from source — there is no pre-built binary to download, by design. Building needs
-no network access beyond the clone.
+Three ways in, in order of how little they ask of you.
+
+### Download a binary
+
+No Go toolchain, no clone, nothing installed outside the directory you are
+standing in. Pick your platform from the
+[latest release](https://github.com/auditaz/auditaz-cli/releases/latest), or:
+
+```sh
+# macOS, Apple Silicon
+curl -fsSLO https://github.com/auditaz/auditaz-cli/releases/latest/download/auditaz_Darwin_arm64.tar.gz
+tar xzf auditaz_Darwin_arm64.tar.gz auditaz
+./auditaz scan
+```
+
+Swap `Darwin_arm64` for `Darwin_amd64` (Intel Mac), `Linux_amd64`,
+`Linux_arm64`, or `Windows_amd64` (a `.zip`).
+
+The binary stays where you unpacked it. Nothing is written anywhere else,
+nothing needs `sudo`, and deleting the file removes every trace of the tool.
+
+**Check it before you run it.** Every release binary is built by GitHub Actions
+from a tagged commit and carries a signed provenance attestation naming that
+commit and the workflow run that produced it:
+
+```sh
+gh attest verify auditaz --repo auditaz/auditaz-cli
+```
+
+Or compare the hash against `checksums.txt` from the same release.
+
+### Build from source
+
+Requires Go (see [`go.mod`](go.mod) for the version). Take this path if you
+would rather run exactly what you just read. Building needs no network access
+beyond the clone.
 
 ```sh
 git clone https://github.com/auditaz/auditaz-cli.git
@@ -91,8 +125,8 @@ so every command in this README then needs a `./` in front of it:
 `./auditaz scan`, `./auditaz preview <file>`. Nothing is written outside the
 clone — delete the folder and no trace of the tool remains on your machine.
 
-The examples in the rest of this README write `auditaz`; after a local build,
-read that as `./auditaz`.
+The examples in the rest of this README write `auditaz`; after a binary download
+or a local build, read that as `./auditaz`.
 
 ## Audit before you run
 

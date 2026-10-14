@@ -1,0 +1,90 @@
+# Release build for the collector.
+#
+# The README used to say there was no pre-built binary to download, "by design",
+# and the reasoning behind that still holds: nobody should have to trust a
+# binary from us. What changes here is how that trust gets earned. Requiring a
+# Go toolchain never made the binary auditable — it made the tool unreachable
+# for most of the people it exists for. A build that runs in a public CI log,
+# from a tagged commit, carrying a provenance attestation anyone can check with
+# `gh attest verify`, is verifiable in a way a local `go build` never was.
+# Compiling from source stays supported and documented; it stops being the
+# price of admission.
+version: 2
+
+project_name: auditaz
+
+before:
+  hooks:
+    - go mod download
+    # A release that cannot prove the collector is read-only has no business
+    # existing. TestCollectorActionsAreReadOnly runs here, so a build that
+    # would ship a write call fails before any artifact is produced.
+    - go test ./...
+
+builds:
+  - id: auditaz
+    main: ./cmd/auditaz
+    binary: auditaz
+    env:
+      - CGO_ENABLED=0
+    flags:
+      # Strip local filesystem paths, so the output does not depend on where it
+      # was built — a precondition for anyone reproducing it.
+      - -trimpath
+    ldflags:
+      - -s -w -X main.version={{ .Version }}
+    goos:
+      - darwin
+      - linux
+      - windows
+    goarch:
+      - amd64
+      - arm64
+    ignore:
+      # Windows on ARM is not a platform this audience runs the AWS CLI on.
+      - goos: windows
+        goarch: arm64
+
+archives:
+  - id: default
+    formats: [tar.gz]
+    format_overrides:
+      - goos: windows
+        formats: [zip]
+    # Darwin_arm64 rather than darwin_arm64: this name is read by a person
+    # picking a file off the releases page, not only by a script.
+    name_template: "{{ .ProjectName }}_{{ title .Os }}_{{ .Arch }}"
+    files:
+      - README.md
+      - LICENSE
+      - NOTICE
+
+checksum:
+  name_template: checksums.txt
+
+changelog:
+  use: github
+  sort: asc
+  filters:
+    exclude:
+      - "^docs:"
+      - "^test:"
+      - "^chore:"
+
+release:
+  draft: false
+  prerelease: auto
+  footer: |
+    ## Verifying what you downloaded
+
+    Every binary here was built by GitHub Actions from the tagged commit and
+    carries a signed provenance attestation. Check it before you run it:
+
+    ```sh
+    gh attest verify auditaz --repo auditaz/auditaz-cli
+    ```
+
+    Or compare against `checksums.txt`.
+
+    Prefer to compile it yourself? That path is unchanged and documented in the
+    README — the source is the commit this release was built from.
