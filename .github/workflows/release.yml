@@ -45,4 +45,7 @@ jobs:
       - name: attest build provenance
         uses: actions/attest-build-provenance@v2
         with:
-          subject-path: dist/*.tar.gz, dist/*.zip, dist/checksums.txt
+          # Both the archives and the binaries inside them. Attesting only the
+          # archive makes `gh attestation verify auditaz` fail with a 404 once
+          # the user has unpacked it, which is exactly when they would check.
+          subject-path: dist/*.tar.gz, dist/*.zip, dist/checksums.txt, dist/*/auditaz, dist/*/auditaz.exe

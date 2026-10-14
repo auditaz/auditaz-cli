@@ -80,15 +80,20 @@ Swap `Darwin_arm64` for `Darwin_amd64` (Intel Mac), `Linux_amd64`,
 The binary stays where you unpacked it. Nothing is written anywhere else,
 nothing needs `sudo`, and deleting the file removes every trace of the tool.
 
-**Check it before you run it.** Every release binary is built by GitHub Actions
-from a tagged commit and carries a signed provenance attestation naming that
-commit and the workflow run that produced it:
+**Check it before you run it.** Every release artifact is built by GitHub
+Actions from a tagged commit and carries a signed provenance attestation naming
+that commit and the workflow run that produced it. Verify the archive before
+unpacking — or the binary afterwards, both are attested:
 
 ```sh
-gh attest verify auditaz --repo auditaz/auditaz-cli
+gh attestation verify auditaz_Darwin_arm64.tar.gz --repo auditaz/auditaz-cli
 ```
 
-Or compare the hash against `checksums.txt` from the same release.
+Or compare the hash against `checksums.txt` from the same release:
+
+```sh
+shasum -a 256 -c checksums.txt --ignore-missing
+```
 
 ### Build from source
 

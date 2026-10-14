@@ -81,10 +81,11 @@ release:
     carries a signed provenance attestation. Check it before you run it:
 
     ```sh
-    gh attest verify auditaz --repo auditaz/auditaz-cli
+    gh attestation verify auditaz_Darwin_arm64.tar.gz --repo auditaz/auditaz-cli
     ```
 
-    Or compare against `checksums.txt`.
+    That works on the archive you downloaded and on the `auditaz` binary inside
+    it. Or compare against `checksums.txt`.
 
     Prefer to compile it yourself? That path is unchanged and documented in the
     README — the source is the commit this release was built from.
