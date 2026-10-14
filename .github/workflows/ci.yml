@@ -1,0 +1,38 @@
+name: CI
+
+# This repository had no CI at all. For a tool whose entire pitch is "we only
+# ever read", the read-only guardrail test is the claim itself — it should run
+# on every change, not only when someone remembers to run `make test`.
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-go@v5
+        with:
+          go-version-file: go.mod
+          cache: true
+
+      - name: gofmt
+        run: make fmt-check
+
+      - name: vet
+        run: make vet
+
+      - name: test
+        run: make test
+
+      # Catches a broken .goreleaser.yaml at the time it is edited, instead of
+      # at the one moment it must work: a tag push, when the release is already
+      # half-published.
+      - name: validate the release config
+        uses: goreleaser/goreleaser-action@v6
+        with:
+          version: "~> v2"
+          args: check
